@@ -66,10 +66,10 @@ echo $CLUSTER_NAME
 if [ "x$NODE_TYPE" != "xmanagement-slave00" ]
 then
     echo "Updating ambari config properties x$NODE_TYPE"
-    #/var/lib/ambari-server/resources/scripts/configs.py -u $AMBARI_USER -p $AMBARI_PASSWORD -s "https" -t $AMBARI_PORT -a "set" -l $AMBARI_HOST -n $CLUSTER_NAME -c "core-site" -k "fs.cos.CloudObjectStorageMatt.access.key" -v "aaaaaa11111111"
-    #/var/lib/ambari-server/resources/scripts/configs.py -u $AMBARI_USER -p $AMBARI_PASSWORD -s "https" -t $AMBARI_PORT -a "set" -l $AMBARI_HOST -n $CLUSTER_NAME -c "core-site" -k "fs.cos.CloudObjectStorageMatt.endpoint" -v "bbbbb22222"
-    #/var/lib/ambari-server/resources/scripts/configs.py -u $AMBARI_USER -p $AMBARI_PASSWORD -s "https" -t $AMBARI_PORT -a "set" -l $AMBARI_HOST -n $CLUSTER_NAME -c "core-site" -k "fs.cos.CloudObjectStorageMatt.secret.key" -v "ccccc33333"
-    #/var/lib/ambari-server/resources/scripts/configs.py -u $AMBARI_USER -p $AMBARI_PASSWORD -s "https" -t $AMBARI_PORT -a "set" -l $AMBARI_HOST -n $CLUSTER_NAME -c "core-site" -k "fs.cos.impl" -v "ddddd44444444"
+    /var/lib/ambari-server/resources/scripts/configs.py -u $AMBARI_USER -p $AMBARI_PASSWORD -s "https" -t $AMBARI_PORT -a "set" -l $AMBARI_HOST -n $CLUSTER_NAME -c "core-site" -k "fs.cos.CloudObjectStorageMatt.access.key" -v "aaaaaa11111111"
+    /var/lib/ambari-server/resources/scripts/configs.py -u $AMBARI_USER -p $AMBARI_PASSWORD -s "https" -t $AMBARI_PORT -a "set" -l $AMBARI_HOST -n $CLUSTER_NAME -c "core-site" -k "fs.cos.CloudObjectStorageMatt.endpoint" -v "bbbbb22222"
+    /var/lib/ambari-server/resources/scripts/configs.py -u $AMBARI_USER -p $AMBARI_PASSWORD -s "https" -t $AMBARI_PORT -a "set" -l $AMBARI_HOST -n $CLUSTER_NAME -c "core-site" -k "fs.cos.CloudObjectStorageMatt.secret.key" -v "ccccc33333"
+    /var/lib/ambari-server/resources/scripts/configs.py -u $AMBARI_USER -p $AMBARI_PASSWORD -s "https" -t $AMBARI_PORT -a "set" -l $AMBARI_HOST -n $CLUSTER_NAME -c "core-site" -k "fs.cos.impl" -v "ddddd44444444"
 
     echo 'Restart affected services'
     response=`curl -u $AMBARI_USER:$AMBARI_PASSWORD -H 'X-Requested-By: ambari' --silent -w "%{http_code}" -X POST -d '{"RequestInfo":{"command":"RESTART","context":"Restart all required services","operation_level":"host_component"},"Requests/resource_filters":[{"hosts_predicate":"HostRoles/stale_configs=true"}]}' https://$AMBARI_HOST:$AMBARI_PORT/api/v1/clusters/$CLUSTER_NAME/requests`
