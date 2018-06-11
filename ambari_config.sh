@@ -66,7 +66,7 @@ echo $CLUSTER_NAME
 if [ "x$NODE_TYPE" != "xmanagement-slave00" ]
 then
     echo "Updating ambari config properties"
-    /var/lib/ambari-server/resources/scripts/configs.py -u $AMBARI_USER -p $AMBARI_PASSWORD -s "https" -t $AMBARI_PORT -a "set" -l $AMBARI_HOST -n $CLUSTER_NAME -c "mapred-site" -k "mapreduce.map.memory.mb" -v "5192"
+    /var/lib/ambari-server/resources/scripts/configs.py -u $AMBARI_USER -p $AMBARI_PASSWORD -s "https" -t $AMBARI_PORT -a "set" -l $AMBARI_HOST -n $CLUSTER_NAME -c "mapred-site" -k "mapreduce.map.memory.mb" -v "5190"
     #/var/lib/ambari-server/resources/scripts/configs.py -u $AMBARI_USER -p $AMBARI_PASSWORD -s "https" -t $AMBARI_PORT -a "set" -l $AMBARI_HOST -n $CLUSTER_NAME -c "core-site" -k "fs.cos.CloudObjectStorageMatt.access.key" -v "abcdefg1234567890"
     #/var/lib/ambari-server/resources/scripts/configs.py -u $AMBARI_USER -p $AMBARI_PASSWORD -s "https" -t $AMBARI_PORT -a "set" -l $AMBARI_HOST -n $CLUSTER_NAME -c "core-site" -k "fs.cos.impl" -v "aaaaa22222222"
     #/var/lib/ambari-server/resources/scripts/configs.py -u $AMBARI_USER -p $AMBARI_PASSWORD -s "https" -t $AMBARI_PORT -a "set" -l $AMBARI_HOST -n $CLUSTER_NAME -c "core-site" -k "fs.s3a.buffer.dir" -v "bbborecuroecu2333333333333"
