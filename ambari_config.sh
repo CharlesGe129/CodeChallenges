@@ -58,19 +58,4 @@ echo $AMBARI_USER
 echo $AMBARI_PASSWORD
 echo $AMBARI_PORT
 echo $AMBARI_HOST
-
-# Actual customization starts here
-if [ "x$NODE_TYPE" != "xmanagement-slave00" ]
-then
-    echo "Updating ambari config properties"
-    #change mapreduce.map.memory to 8192mb
-    /var/lib/ambari-server/resources/scripts/configs.sh -u $AMBARI_USER -p $AMBARI_PASSWORD -port $AMBARI_PORT -s set $AMBARI_HOST $CLUSTER_NAME mapred-site "mapreduce.map.memory.mb" "8192"
-    echo "Updating Custom core-site"
-    /var/lib/ambari-server/resources/scripts/configs.sh -u $AMBARI_USER -p $AMBARI_PASSWORD -port $AMBARI_PORT -s set $AMBARI_HOST "HDFS" "Custom core-site" "fs.cos.CloudObjectStorageMatt.access.key" "abcdefg1234567890"
-    echo "Updated Custom core-site"
-    # stop MAPREDUCE2 service
-    curl -v --user $AMBARI_USER:$AMBARI_PASSWORD -H "X-Requested-By: ambari" -i -X PUT -d '{"RequestInfo": {"context": "Stop MAPREDUCE2"}, "ServiceInfo": {"state": "INSTALLED"}}' https://$AMBARI_HOST:$AMBARI_PORT/api/v1/clusters/$CLUSTER_NAME/services/MAPREDUCE2
-    sleep 60
-    # start MAPREDUCE2 service
-    curl -v --user $AMBARI_USER:$AMBARI_PASSWORD -H "X-Requested-By: ambari" -i -X PUT -d '{"RequestInfo": {"context": "Start MAPREDUCE2"}, "ServiceInfo": {"state": "STARTED"}}' https://$AMBARI_HOST:$AMBARI_PORT/api/v1/clusters/$CLUSTER_NAME/services/MAPREDUCE2
-fi
+echo $CLUSTER_NAME
