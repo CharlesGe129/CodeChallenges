@@ -69,9 +69,17 @@ then
     /var/lib/ambari-server/resources/scripts/configs.py -u $AMBARI_USER -p $AMBARI_PASSWORD -s "https" -t $AMBARI_PORT -a "set" -l $AMBARI_HOST -n $CLUSTER_NAME -c "core-site" -k "fs.cos.impl" -v "aaaaa22222222"
     /var/lib/ambari-server/resources/scripts/configs.py -u $AMBARI_USER -p $AMBARI_PASSWORD -s "https" -t $AMBARI_PORT -a "set" -l $AMBARI_HOST -n $CLUSTER_NAME -c "core-site" -k "fs.s3a.buffer.dir" -v "bbborecuroecu2333333333333"
     /var/lib/ambari-server/resources/scripts/configs.py -u $AMBARI_USER -p $AMBARI_PASSWORD -s "https" -t $AMBARI_PORT -a "set" -l $AMBARI_HOST -n $CLUSTER_NAME -c "core-site" -k "fs.s3a.impl" -v "anocuiaro444444444444444"
-    # stop MAPREDUCE2 service
-    curl -v --user $AMBARI_USER:$AMBARI_PASSWORD -H "X-Requested-By: ambari" -i -X PUT -d '{"RequestInfo": {"context": "Stop MAPREDUCE2"}, "ServiceInfo": {"state": "INSTALLED"}}' https://$AMBARI_HOST:$AMBARI_PORT/api/v1/clusters/$CLUSTER_NAME/services/MAPREDUCE2
-    sleep 60
-    # start MAPREDUCE2 service
-    curl -v --user $AMBARI_USER:$AMBARI_PASSWORD -H "X-Requested-By: ambari" -i -X PUT -d '{"RequestInfo": {"context": "Start MAPREDUCE2"}, "ServiceInfo": {"state": "STARTED"}}' https://$AMBARI_HOST:$AMBARI_PORT/api/v1/clusters/$CLUSTER_NAME/services/MAPREDUCE2
+
+    echo 'Restart affected services'
+    response=`curl -u $AMBARI_USER:$AMBARI_PASSWORD -H 'X-Requested-By: ambari' --silent -w "%{http_code}" -X POST -d '{"RequestInfo":{"command":"RESTART","context":"Restart all required services","operation_level":"host_component"},"Requests/resource_filters":[{"hosts_predicate":"HostRoles/stale_configs=true"}]}' https://$AMBARI_HOST:$AMBARI_PORT/api/v1/clusters/$CLUSTER_NAME/requests`
+
+    httpResp=${response:(-3)}
+    if [[ "$httpResp" != "202" ]]
+    then
+        echo "Error initiating restart for the affected services, API response: $httpResp"
+        exit 1
+    else
+        echo "Request accepted. Service restart in progress...${response::-3}"
+        trackProgress "${response::-3}"
+    fi
 fi
